@@ -362,17 +362,21 @@
             if (task.files && task.files.length === 1 && task.files[0].uris && task.files[0].uris[0]) {
                 var isSingleUrlTask = true;
                 var firstUri = task.files[0].uris[0].uri;
+                var uniqueUris = [firstUri];
 
                 for (var i = 0; i < task.files[0].uris.length; i++) {
                     var uri = task.files[0].uris[i].uri;
 
-                    if (uri !== firstUri) {
-                        isSingleUrlTask = false;
-                        break;
+                    if (uri !== firstUri && uniqueUris.indexOf(uri) === -1) {
+                        // isSingleUrlTask = false;
+                        // break;
+                        uniqueUris.push(uri);
                     }
                 }
 
-                if (isSingleUrlTask) {
+                if (uniqueUris.length > 1) {
+                    task.singleUrl = uniqueUris.join('\n');
+                } else {
                     task.singleUrl = firstUri;
                 }
             }
